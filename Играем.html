@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Играем и помогаем мышонку — виртуальная Робомышь</title>
+<style>
+:root{--ink:#17233b;--muted:#66738b;--line:#dce4ef;--paper:#f5f8fc;--blue:#315fe8;--blue2:#e9efff;--teal:#0e9f8b;--orange:#f1a23b;--red:#db5b62;--shadow:0 12px 36px rgba(26,48,89,.10)}
+*{box-sizing:border-box}body{margin:0;background:linear-gradient(135deg,#f4f7fc,#edf3fb);font-family:Inter,Segoe UI,Arial,sans-serif;color:var(--ink)}button{font:inherit;cursor:pointer;border:0} .wrap{max-width:1180px;margin:0 auto;padding:24px 22px 40px}.hero{display:flex;justify-content:space-between;align-items:center;gap:18px;margin-bottom:20px}.eyebrow{font-size:12px;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:var(--blue)}h1{font-size:clamp(26px,4vw,42px);line-height:1.08;margin:8px 0 8px}.sub{color:var(--muted);font-size:15px;line-height:1.5;max-width:720px}.offline{background:#e8f7f2;color:#137964;border:1px solid #c4eadf;border-radius:999px;padding:9px 14px;font-size:12px;font-weight:800;white-space:nowrap}.layout{display:grid;grid-template-columns:minmax(0,1.12fr) minmax(310px,.88fr);gap:18px;align-items:start}.panel{background:#fff;border:1px solid var(--line);border-radius:20px;box-shadow:var(--shadow);padding:18px}.panel h2{font-size:18px;margin:0 0 8px}.intro{font-size:13px;line-height:1.5;color:var(--muted);margin:0 0 16px}.topline{display:flex;align-items:center;justify-content:space-between;gap:10px}.leveltag{border-radius:999px;background:var(--blue2);color:var(--blue);font-size:11px;font-weight:800;padding:7px 10px}.board-wrap{background:#f7f9fd;border:1px solid #e6ecf5;border-radius:16px;padding:12px}.board{display:grid;grid-template-columns:repeat(6,1fr);gap:6px;width:100%;aspect-ratio:1}.coordboard{display:grid;grid-template-columns:26px minmax(0,1fr);grid-template-rows:26px auto;gap:4px;max-width:540px;margin:0 auto;align-items:stretch}.colcoords{grid-column:2;grid-row:1;display:grid;grid-template-columns:repeat(6,1fr);gap:6px;text-align:center;align-items:center;font-weight:900;color:#5367a7;font-size:14px}.rowcoords{grid-column:1;grid-row:2;display:grid;grid-template-rows:repeat(6,1fr);gap:6px;text-align:center;align-items:center;font-weight:900;color:#5367a7;font-size:14px}.board{grid-column:2;grid-row:2}.cell{position:relative;min-width:0;border-radius:10px;background:#fff;border:1px solid #e1e8f2;display:flex;align-items:center;justify-content:center;font-size:clamp(21px,4vw,34px);transition:background .15s,transform .15s}.cell.wall{background:#dce2ec;border-color:#d0d8e5}.cell.target{background:#fff5d9;border-color:#f2d58a}.cell.check{background:#e5f7f1;border-color:#a9dfd0}.cell.visited{box-shadow:inset 0 0 0 3px #b7c8ff}.cell.mouse{background:#eaf0ff;border:2px solid #6688f4}.cell .coord{position:absolute;bottom:3px;right:5px;font-size:9px;color:#9aa6b8}.legend{display:flex;gap:14px;flex-wrap:wrap;margin:12px 2px 0;color:var(--muted);font-size:11px}.legend span{display:flex;align-items:center;gap:5px}.dot{width:10px;height:10px;border-radius:3px;background:#fff;border:1px solid var(--line)}.dot.wall{background:#dce2ec}.dot.target{background:#ffe8a6}.dot.check{background:#bce9dc}.mission{margin-top:14px;border-radius:14px;padding:13px 14px;background:#f0f5ff;border:1px solid #dce6ff}.mission strong{display:block;font-size:13px;margin-bottom:5px}.mission p{font-size:13px;line-height:1.48;margin:0;color:#455674}.tabs{display:flex;gap:7px;flex-wrap:wrap;margin:4px 0 14px}.tab{padding:9px 11px;background:#f0f3f8;color:#52617a;border-radius:10px;font-size:12px;font-weight:750}.tab.active{background:var(--blue);color:white}.taskname{font-size:17px;font-weight:800;margin:0 0 5px}.taskdesc{font-size:13px;color:var(--muted);line-height:1.5;margin:0 0 13px}.pillrow{display:flex;gap:7px;flex-wrap:wrap;margin-bottom:14px}.pill{font-size:11px;font-weight:750;padding:6px 9px;border-radius:999px;background:#f2f5fa;color:#52617a}.sectionlabel{font-size:11px;font-weight:850;letter-spacing:.08em;color:#79869c;text-transform:uppercase;margin:13px 0 8px}.commandpad{display:grid;grid-template-columns:repeat(3,1fr);gap:7px;max-width:240px;margin:0 auto 10px}.cmd{background:#f0f4fc;border:1px solid #dce5f3;color:#29416c;border-radius:12px;padding:12px 4px;font-size:21px;font-weight:800}.cmd:active{transform:scale(.97)}.cmd.empty{visibility:hidden}.actions{display:flex;gap:7px;flex-wrap:wrap}.btn{padding:10px 13px;border-radius:11px;font-size:12px;font-weight:800}.primary{background:var(--blue);color:white}.secondary{background:#edf1f7;color:#34435d}.teal{background:#e3f6f1;color:#087966}.warning{background:#fff2de;color:#986019}.queue{min-height:54px;border:1px dashed #bfcbdd;border-radius:12px;padding:8px;display:flex;flex-wrap:wrap;gap:6px;align-items:center;background:#fafcff}.qitem{background:#eaf0ff;color:#244fca;border:0;border-radius:8px;padding:7px 9px;font-size:13px;font-weight:850;cursor:pointer}.qitem:hover{background:#dce7ff}.qitem.done{background:#e0f5ec;color:#168263;text-decoration:line-through}.emptymsg{color:#9aa5b7;font-size:12px;padding:7px}.status{margin-top:12px;border-radius:12px;padding:10px 12px;background:#f4f6fa;color:#52617a;font-size:12px;line-height:1.45;min-height:42px}.status.good{background:#e8f7f1;color:#13765f}.status.bad{background:#fff0ee;color:#a33f47}.hint{background:#fff8e9;border:1px solid #f4e1b6;border-radius:12px;padding:10px 12px;font-size:12px;line-height:1.45;color:#75551e;margin-top:10px}.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:7px;margin-top:13px}.stat{background:#f6f8fc;border:1px solid #e8edf5;border-radius:12px;padding:9px}.stat b{display:block;font-size:18px}.stat span{font-size:10px;color:var(--muted)}.footer{text-align:center;color:#8792a5;font-size:11px;margin-top:17px;line-height:1.5}.small{font-size:11px;color:var(--muted);line-height:1.45}.sequence{display:flex;gap:6px;flex-wrap:wrap;margin:8px 0}.seqitem{padding:8px 11px;border-radius:9px;background:#fff4db;color:#805413;font-weight:850}.hide{display:none!important}
+@media(max-width:850px){.layout{grid-template-columns:1fr}.hero{align-items:flex-start;flex-direction:column}.offline{white-space:normal}.panel{padding:14px}}
+
+.builder{background:#fff;border:1px solid var(--line);border-radius:20px;box-shadow:var(--shadow);padding:18px;margin:0 0 18px}
+.builderhead{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;flex-wrap:wrap}
+.buildercoordboard{display:grid;grid-template-columns:26px minmax(0,1fr);grid-template-rows:26px auto;gap:4px;width:min(100%,390px);margin:0 auto;align-items:stretch}.buildercolcoords{grid-column:2;grid-row:1;display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:7px;text-align:center;align-items:center;font-weight:900;color:#5367a7;font-size:14px}.builderrowcoords{grid-column:1;grid-row:2;display:grid;grid-template-rows:repeat(6,minmax(0,1fr));gap:7px;text-align:center;align-items:center;font-weight:900;color:#5367a7;font-size:14px}.buildergrid{grid-column:2;grid-row:2;display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:5px;width:100%;aspect-ratio:1}
+.bcell{border:1px solid #dfe6f0;border-radius:9px;background:#f8faff;color:#40516d;font-size:clamp(17px,3vw,25px);font-weight:800;display:flex;align-items:center;justify-content:center;min-width:0}
+.bcell.start{background:#eaf0ff;border:2px solid #6688f4}.bcell.goal{background:#fff5d9;border:2px solid #f2d58a}.bcell.wall{background:#dce2ec}.bcell.check{background:#e5f7f1;border:2px solid #a9dfd0}
+.buildertools{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;align-items:end}
+.buildertools label{display:block;font-size:12px;font-weight:750;color:#52617a;margin-bottom:5px}
+.buildertools input,.buildertools select,.buildertools textarea{width:100%;border:1px solid #dce4ef;border-radius:10px;padding:10px;font:inherit;color:var(--ink);background:#fff}
+.buildertools textarea{min-height:68px;resize:vertical}.builderwide{grid-column:1/-1}
+.buildercontent{display:grid;grid-template-columns:minmax(230px,.85fr) minmax(280px,1.15fr);gap:18px;margin-top:14px;align-items:start}
+.modebar{display:flex;flex-wrap:wrap;gap:6px;margin:9px 0}.modebtn{padding:8px 10px;border-radius:9px;background:#f0f3f8;color:#52617a;font-size:11px;font-weight:800}.modebtn.active{background:var(--blue);color:#fff}
+.buildernote{font-size:12px;line-height:1.5;color:var(--muted);margin:8px 0}
+@media(max-width:760px){.buildercontent{grid-template-columns:1fr}.buildertools{grid-template-columns:1fr}.builderwide{grid-column:auto}}
+
+
+/* ===== Яркое оформление STEM-лаборатории ===== */
+:root{
+  --ink:#1d2850;--muted:#64708d;--line:#e2e8f6;--paper:#f5f6ff;
+  --blue:#5368e8;--blue2:#edf0ff;--teal:#0aa992;--orange:#f59b38;
+  --red:#ec6684;--shadow:0 16px 42px rgba(49,59,124,.12)
+}
+body{
+  background:
+    radial-gradient(circle at 8% 5%,rgba(255,207,120,.24),transparent 23rem),
+    radial-gradient(circle at 94% 12%,rgba(153,140,255,.20),transparent 26rem),
+    linear-gradient(135deg,#f8f8ff 0%,#eef9ff 48%,#fff7f0 100%);
+  color:var(--ink)
+}
+.wrap{max-width:1240px;padding-top:22px}
+.hero{
+  position:relative;overflow:hidden;isolation:isolate;
+  padding:27px 30px;border-radius:26px;margin-bottom:20px;
+  background:linear-gradient(118deg,#3d3b9c 0%,#4166d9 48%,#149f9c 100%);
+  box-shadow:0 18px 40px rgba(60,76,174,.22);color:#fff
+}
+.hero:before,.hero:after{content:"";position:absolute;z-index:-1;border-radius:50%;pointer-events:none}
+.hero:before{width:245px;height:245px;right:80px;top:-155px;background:rgba(255,255,255,.12)}
+.hero:after{content:"🐭";width:auto;height:auto;right:34px;bottom:-23px;border-radius:0;font-size:112px;opacity:.20;transform:rotate(-12deg)}
+.hero .eyebrow{color:#ffe49a}
+.hero h1{color:white;text-shadow:0 3px 12px rgba(16,25,87,.18);letter-spacing:-.035em}
+.hero .sub{color:rgba(255,255,255,.88);max-width:760px}
+.offline{background:#e3fff4;color:#087a67;border:1px solid rgba(255,255,255,.75);box-shadow:0 4px 12px rgba(13,67,85,.12)}
+.hero .offline{background:rgba(255,255,255,.17);color:#fff;border:1px solid rgba(255,255,255,.34);box-shadow:none;backdrop-filter:blur(8px)}
+.builder,.panel{
+  border:1px solid rgba(212,221,250,.95);border-radius:23px;
+  box-shadow:var(--shadow)
+}
+.builder{
+  position:relative;overflow:hidden;
+  background:linear-gradient(135deg,#fff 0%,#f2f8ff 53%,#fff5ed 100%);
+  padding:21px
+}
+.builder:before{content:"";position:absolute;left:0;top:0;width:100%;height:6px;background:linear-gradient(90deg,#ffb84d,#f47791,#8c79ed,#42c7b4)}
+.builder h2{color:#3c469b}
+.panel{background:rgba(255,255,255,.96);padding:19px}
+.panel h2{color:#35428d}
+.eyebrow{color:#6458cb}
+.intro{color:#687492}
+.sectionlabel{color:#6972ae}
+.topline{margin-bottom:10px}
+.leveltag{background:#eeeaff;color:#5d4ac7;border:1px solid #ded6ff}
+.board-wrap{background:linear-gradient(135deg,#eff8ff,#f5f0ff);border:1px solid #dce7ff;border-radius:19px;padding:13px}
+.board{gap:7px}
+.cell{border:1px solid #d9e4fa;border-radius:12px;background:linear-gradient(145deg,#fff,#f8fbff);box-shadow:0 2px 4px rgba(65,86,150,.035)}
+.cell:nth-child(6n+2),.cell:nth-child(6n+5){background:#f4f8ff}
+.cell.wall{background:linear-gradient(145deg,#c8c3f5,#aaa5e4);border-color:#9c96dd;color:#463e91;box-shadow:inset 0 -3px 0 rgba(76,65,148,.10)}
+.cell.target{background:linear-gradient(145deg,#fff1b8,#ffdc75);border:2px solid #f1bb43;box-shadow:0 3px 10px rgba(230,169,45,.16)}
+.cell.check{background:linear-gradient(145deg,#d9fff0,#a8ead8);border:2px solid #6ccbb0}
+.cell.visited{box-shadow:inset 0 0 0 3px #8b9bf8,0 0 0 2px rgba(139,155,248,.18)}
+.cell.mouse{background:linear-gradient(145deg,#ffe1e9,#ffbdcf);border:2px solid #ee7595;box-shadow:0 4px 12px rgba(227,91,130,.2)}
+.dot.wall{background:#b7b1ed;border-color:#938bdc}.dot.target{background:#ffdf81;border-color:#e8b84b}.dot.check{background:#aee9d7;border-color:#67c5aa}
+.mission{background:linear-gradient(110deg,#edf2ff,#f2edff);border:1px solid #d9dcff;border-left:5px solid #7971e8;border-radius:15px}
+.mission strong{color:#4f48a8}.mission p{color:#4f5d82}
+.tabs{gap:8px}
+.tab{background:#eef1ff;color:#53608b;border:1px solid #e0e5ff;transition:transform .15s,box-shadow .15s}
+.tab:hover,.modebtn:hover,.btn:hover,.cmd:hover{transform:translateY(-2px);filter:saturate(1.08)}
+.tab:nth-child(8n+1){background:#e6efff;color:#3159b5;border-color:#cbdcff}
+.tab:nth-child(8n+2){background:#e1f8f2;color:#087d67;border-color:#c0eddf}
+.tab:nth-child(8n+3){background:#fff0e4;color:#a75d20;border-color:#ffdcc2}
+.tab:nth-child(8n+4){background:#f0eaff;color:#6b4ab6;border-color:#dfd2ff}
+.tab:nth-child(8n+5){background:#fff5d8;color:#94701b;border-color:#f4e4a9}
+.tab:nth-child(8n+6){background:#ffeaf0;color:#ad496a;border-color:#f8d1df}
+.tab:nth-child(8n+7){background:#e3f4ff;color:#26749c;border-color:#c7e8fa}
+.tab:nth-child(8n){background:#eaf5e2;color:#577e32;border-color:#d7e9c7}
+.tab.active{background:linear-gradient(120deg,#515fd8,#8266e9);color:#fff;border-color:transparent;box-shadow:0 5px 13px rgba(91,88,211,.24)}
+.taskname{color:#38458e;font-size:19px}
+.pill{background:#eff1ff;color:#5659a0;border:1px solid #e2e4ff}
+.pillrow .pill:nth-child(2){background:#e2f8f1;color:#087c66;border-color:#c5eee1}
+.pillrow .pill:nth-child(3){background:#fff0e4;color:#a35e23;border-color:#ffe0c7}
+.sequence{gap:8px}
+.seqitem{background:linear-gradient(145deg,#fff0c4,#ffe29a);color:#81550c;border:1px solid #f4d27a;box-shadow:0 2px 5px rgba(185,130,25,.08)}
+.seqitem:nth-child(2n){background:linear-gradient(145deg,#e7f8f3,#c9f0e3);color:#087b68;border-color:#b4e7d8}
+.commandpad{gap:9px;max-width:255px}
+.cmd{min-height:52px;border-radius:15px;background:linear-gradient(145deg,#edf1ff,#dfe7ff);border:1px solid #cbd6ff;color:#3c4eb4;box-shadow:0 4px 9px rgba(75,91,179,.10);transition:transform .15s,box-shadow .15s}
+.cmd[data-cmd="U"]{background:linear-gradient(145deg,#dcf8f0,#b9eddf);border-color:#a4e0d0;color:#087c68}
+.cmd[data-cmd="L"]{background:linear-gradient(145deg,#eee7ff,#ddd1ff);border-color:#d0c0ff;color:#6747b3}
+.cmd[data-cmd="D"]{background:linear-gradient(145deg,#fff3ce,#ffe39a);border-color:#f3d47a;color:#966b0d}
+.cmd[data-cmd="R"]{background:linear-gradient(145deg,#ffe7ec,#ffcbd8);border-color:#f5b6c8;color:#a84062}
+.cmd:active{transform:scale(.96)}
+.actions{gap:8px}
+.btn{border-radius:12px;transition:transform .15s,filter .15s,box-shadow .15s}
+.btn.primary{background:linear-gradient(120deg,#5265df,#795fe2);color:#fff;box-shadow:0 5px 12px rgba(87,92,210,.20)}
+.btn.teal{background:linear-gradient(120deg,#d8f8ee,#bceede);color:#087967;border:1px solid #afe5d5}
+.btn.warning{background:linear-gradient(120deg,#fff0cd,#ffe2a2);color:#875d10;border:1px solid #f5d58b}
+.btn.secondary{background:#eef1fb;color:#48557c;border:1px solid #dfe4f4}
+.queue{background:linear-gradient(120deg,#f7f8ff,#effaff);border:1px dashed #abb9ed;border-radius:14px}
+.qitem{background:linear-gradient(145deg,#e6ecff,#d9e3ff);color:#3d50b7;border:1px solid #cbd7ff}
+.qitem.done{background:#d9f5e9;color:#11765d;border-color:#b9e8d4}
+.status{background:#eef2ff;color:#495a91;border:1px solid #dfe5ff;border-radius:14px}
+.status.good{background:#ddf8ed;color:#08785f;border-color:#b8ead7}
+.status.bad{background:#fff0ed;color:#aa4351;border-color:#ffd4cf}
+.hint{background:linear-gradient(110deg,#fff8df,#fff1d6);border:1px solid #f2dfa5;border-left:4px solid #efb83f;color:#74551b;border-radius:14px}
+.stats{gap:9px}
+.stat{border:1px solid #e3e6fa;background:linear-gradient(145deg,#f3f4ff,#fff);border-radius:14px}
+.stat:nth-child(2){background:linear-gradient(145deg,#e9faf4,#fff);border-color:#d5f0e6}
+.stat:nth-child(3){background:linear-gradient(145deg,#fff4e9,#fff);border-color:#f7e5d2}
+.stat b{color:#4d56b5}.stat:nth-child(2) b{color:#11836e}.stat:nth-child(3) b{color:#c07832}
+.buildergrid{gap:7px;padding:8px;background:linear-gradient(145deg,#edf2ff,#f0fbff);border:1px solid #dbe4ff;border-radius:18px}
+.bcell{background:linear-gradient(145deg,#fff,#f5f8ff);border:1px solid #dce4fa;border-radius:11px;box-shadow:0 2px 4px rgba(69,86,151,.05)}
+.bcell:nth-child(3n+2){background:#f2f7ff}
+.bcell.start{background:linear-gradient(145deg,#e5edff,#cddaff);border:2px solid #8096ed;color:#344da8}
+.bcell.goal{background:linear-gradient(145deg,#fff0b8,#ffdc78);border:2px solid #ecbd4c;color:#875d10}
+.bcell.wall{background:linear-gradient(145deg,#c9c4f4,#a9a3e5);border:1px solid #9a93da;color:#4c438e}
+.bcell.check{background:linear-gradient(145deg,#d9f9ed,#aeead8);border:2px solid #71cdb0;color:#087965}
+.buildertools input:focus,.buildertools select:focus,.buildertools textarea:focus{outline:3px solid rgba(103,119,232,.17);border-color:#8290ed}
+.buildertools label{color:#4f5b92}
+.buildertools input,.buildertools select,.buildertools textarea{border:1px solid #d9e1f5;background:#fff;border-radius:11px}
+.modebtn{border:1px solid transparent;transition:transform .15s,box-shadow .15s}
+.modebtn[data-mode="wall"]{background:#eeeaff;color:#644bb4;border-color:#ded4ff}
+.modebtn[data-mode="check"]{background:#e2f8ef;color:#087b65;border-color:#c5eddd}
+.modebtn[data-mode="start"]{background:#e5edff;color:#3859b6;border-color:#ccd9ff}
+.modebtn[data-mode="goal"]{background:#fff4d3;color:#946b13;border-color:#f5e3a9}
+.modebtn[data-mode="erase"]{background:#ffeaf0;color:#a74767;border-color:#f5d2de}
+.modebtn.active{box-shadow:0 0 0 2px rgba(71,87,191,.22),0 4px 9px rgba(63,80,162,.10);filter:saturate(1.2);transform:translateY(-1px)}
+#builderStatus{background:linear-gradient(110deg,#e9f8f3,#eef3ff);border:1px solid #d6e8f5;color:#385c7b}
+.footer{color:#7a83a0}
+@media(max-width:850px){.hero{padding:22px 20px}.hero:after{right:10px;font-size:76px;bottom:-14px}.hero .sub{max-width:90%}}
+@media(prefers-reduced-motion:reduce){*,*:before,*:after{transition:none!important;scroll-behavior:auto!important}}
+
+
+/* Режим самостоятельной игры ребёнка */
+.hero{background:linear-gradient(120deg,#fff0c8,#ffe5ef 52%,#e8f5ff);border:1px solid #f4dfbd;border-radius:24px;padding:24px 26px;box-shadow:0 8px 22px rgba(93,104,160,.08)}
+.hero .eyebrow{color:#a15c32}.hero h1{color:#4b4c9a}.hero .sub{font-size:16px;color:#535d82}
+.layout{grid-template-columns:minmax(0,1fr) minmax(340px,.92fr);gap:16px}
+.panel{border:2px solid #e5e8fb;border-radius:22px;padding:20px}
+.panel h2{font-size:22px;color:#4c55a6}
+.tabs{gap:8px}.tab{font-size:13px;padding:11px 13px;border-radius:13px;min-height:42px}
+.taskname{font-size:22px;color:#4e4da4}.taskdesc{font-size:15px;color:#536080;line-height:1.55}
+.commandpad{max-width:285px;gap:10px}.cmd{min-height:66px;font-size:30px;border-radius:18px;touch-action:manipulation}
+.btn{font-size:13px;padding:12px 15px;min-height:42px}.btn.primary{font-size:16px;padding:14px 22px}
+.queue{min-height:62px;padding:10px}.qitem{font-size:17px;padding:9px 12px}.mission{padding:16px}.mission strong{font-size:16px}.mission p{font-size:15px;line-height:1.5}
+.status{font-size:15px;line-height:1.5;padding:13px 15px;min-height:52px}.hint{font-size:14px;line-height:1.5}.stat b{font-size:22px}.stat span{font-size:11px}.coord{display:none!important}
+.board{gap:7px}.cell{font-size:clamp(25px,4.2vw,38px);border-radius:13px;min-height:54px}.cell.wall{background:linear-gradient(145deg,#c9c5ef,#aaa5e3);color:#5a4f9b}.cell.check{font-size:28px}.legend{font-size:12px}
+#tabs{margin-bottom:16px}.sectionlabel{font-size:12px;color:#7276ad}
+@media(max-width:850px){.layout{grid-template-columns:1fr}.hero{padding:20px}.cell{min-height:42px}.cmd{min-height:58px}}
+
+
+/* Мобильная адаптация: весь тренажёр помещается по ширине экрана */
+@media (max-width: 850px) {
+  html, body { width:100%; min-width:0; overflow-x:hidden; }
+  .wrap { width:100%; max-width:100%; padding:10px 10px 22px; margin:0 auto; }
+  .hero { width:100%; padding:17px 16px; border-radius:18px; margin-bottom:12px; gap:10px; }
+  .hero h1 { font-size:clamp(23px, 6vw, 32px); line-height:1.12; }
+  .hero .sub { font-size:13px; line-height:1.4; }
+  .offline { font-size:11px; padding:7px 10px; }
+  .layout { display:grid; grid-template-columns:minmax(0,1fr); width:100%; gap:12px; }
+  .panel { width:100%; min-width:0; padding:12px; border-radius:17px; }
+  .panel h2 { font-size:16px; }
+  .intro, .taskdesc { font-size:12px; }
+  .board-wrap { width:100%; padding:8px; }
+  .coordboard { width:100%; max-width: min(100%, 460px); grid-template-columns:20px minmax(0,1fr); grid-template-rows:20px auto; gap:3px; }
+  .colcoords, .rowcoords { gap:3px; font-size:12px; }
+  .board { width:100%; gap:4px; }
+  .cell { min-width:0; min-height:0; border-radius:7px; font-size:clamp(19px, 6vw, 29px); }
+  .cell .coord { font-size:7px; right:2px; bottom:1px; }
+  .legend { gap:7px 10px; font-size:10px; }
+  .mission { margin-top:10px; padding:10px; }
+  .tabs { gap:6px; }
+  .tab { padding:8px 9px; font-size:11px; }
+  .commandpad { max-width:210px; gap:6px; }
+  .cmd { min-height:48px; padding:9px 3px; font-size:22px; touch-action:manipulation; }
+  .actions { gap:6px; }
+  .btn { min-height:40px; padding:9px 10px; font-size:11px; }
+  .queue { min-height:48px; }
+  .status, .hint { font-size:11px; }
+  .stats { gap:5px; }
+  .stat { padding:7px; }
+  .stat b { font-size:16px; }
+  .footer { font-size:10px; margin-top:12px; }
+}
+@media (max-width: 380px) {
+  .wrap { padding-left:7px; padding-right:7px; }
+  .panel { padding:10px; }
+  .hero { padding:14px 12px; }
+  .leveltag { font-size:10px; padding:6px 8px; }
+  .tab { padding:7px 8px; }
+  .btn { padding:8px; }
+}
+
+</style>
+</head>
+<body>
+<div class="wrap">
+<header class="hero">
+<div><div class="eyebrow">ИГРАЕМ И ПОМОГАЕМ МЫШОНКУ</div><h1>Помоги Робомышке найти сыр! 🐭</h1><div class="sub">Выбирай приключение, нажимай на стрелки и прокладывай путь к сыру. Будь внимателен: на пути могут встретиться препятствия и секретные задания!</div></div>
+<div class="offline">● Работает без интернета</div>
+</header>
+<main class="layout">
+<section class="panel">
+<div class="topline"><h2>🧀 Игровое поле</h2><span class="leveltag" id="levelLabel">Игра 1</span></div>
+<p class="intro">Помоги мышонку добраться до сыра! Серые клетки — преграды, зелёные звёздочки — важные точки, которые нужно собрать.</p>
+<div class="board-wrap"><div class="coordboard"><div aria-hidden="true" class="colcoords"><span>А</span><span>Б</span><span>В</span><span>Г</span><span>Д</span><span>Е</span></div><div aria-hidden="true" class="rowcoords"><span>1</span><span>2</span><span>3</span><span>4</span><span>5</span><span>6</span></div><div aria-label="Поле робомыши" class="board" id="board"></div></div>
+<div class="legend"><span><i class="dot"></i> дорожка</span><span><i class="dot wall"></i> нельзя пройти</span><span><i class="dot target"></i> сыр — финиш</span><span><i class="dot check"></i> собери звёздочку</span></div>
+</div>
+<div class="mission"><strong id="missionTitle">🎯 Твоя миссия</strong><p id="missionText">Проложи путь к сыру и нажми «Поехали!»</p></div>
+<div class="stats"><div class="stat"><b id="stepsStat">0</b><span>шагов сделано</span></div><div class="stat"><b id="commandsStat">0</b><span>стрелок выбрано</span></div><div class="stat"><b id="attemptsStat">0</b><span>попыток</span></div></div>
+</section>
+<section class="panel">
+<div class="sectionlabel">Выбери приключение</div><div aria-label="Выбор игры" class="tabs" id="tabs" role="tablist"></div>
+<div class="taskname" id="taskName">Маршрут памяти</div>
+<p class="taskdesc" id="taskDesc">Запомните короткую последовательность команд, затем восстановите её и запрограммируйте движение.</p>
+<div class="pillrow"><span class="pill">🐭 Ты — программист!</span><span class="pill">⭐ Собирай звёзды</span></div>
+<div class="sectionlabel" id="sequenceLabel">Запомни стрелки</div>
+<div class="sequence" id="sequenceBox"><span class="seqitem">→</span><span class="seqitem">→</span><span class="seqitem">↑</span><span class="seqitem">↑</span></div>
+<div class="actions" id="hintActions"><button class="btn warning" id="toggleHint">Спрятать стрелки</button><button class="btn secondary" id="newTask">Начать заново</button></div>
+<div class="sectionlabel">Нажимай на стрелки — строй дорожку</div>
+<div class="commandpad">
+<button class="cmd empty" tabindex="-1"> </button><button aria-label="Вверх" class="cmd" data-cmd="U">↑</button><button class="cmd empty" tabindex="-1"> </button>
+<button aria-label="Влево" class="cmd" data-cmd="L">←</button><button aria-label="Вниз" class="cmd" data-cmd="D">↓</button><button aria-label="Вправо" class="cmd" data-cmd="R">→</button>
+</div>
+<div class="sectionlabel">Твои стрелки</div>
+<div class="queue" id="queue"><span class="emptymsg">Пока нет команд. Добавьте стрелки выше.</span></div><p class="small">Передумал? Нажми на стрелку в дорожке, чтобы убрать её.</p>
+<div class="actions" style="margin-top:9px"><button class="btn primary" id="runBtn">▶ Поехали!</button><button class="btn teal" id="stepBtn">👣 Шаг</button><button class="btn secondary" id="undoBtn">↶ Убрать стрелку</button><button class="btn secondary" id="clearBtn">Очистить путь</button><button class="btn secondary" id="resetBtn">Вернуть мышку</button></div>
+<div aria-live="polite" class="status" id="status">Выбери стрелки, чтобы построить путь, а потом нажми «Поехали!»</div>
+<div class="hint" id="coachHint"><b>Совет мышонка:</b> Сначала посмотри на всё поле и придумай путь.</div>
+</section>
+</main>
+
+<div class="footer">Демонстрационный симулятор для мастер-класса. Он моделирует программирование движения, но не является физическим STEM-набором, диагностическим инструментом или валидированной коррекционной методикой.</div>
+</div>
+<script>
+const tasks=[
+ {tab:'Память',name:'Маршрут памяти',process:'Рабочая память',title:'Миссия: запомни маршрут',desc:'Запомни показанные стрелки. Спрячь подсказку и повтори путь сам.',mission:'Запомни стрелки и повтори их по порядку.',missionText:'Посмотри на стрелки: вправо, вправо, вверх, вверх, вверх. Запомни их, спрячь подсказку и помоги мышонку добраться до сыра.',start:[5,0],target:[2,2],walls:[],checks:[],sequence:['R','R','U','U','U'],coach:'Какая стратегия помогла запомнить порядок команд? Группировали ли вы их или повторяли про себя?',route:['R','R','U','U','U']},
+ {tab:'Внимание',name:'Лабиринт внимания',process:'Избирательное внимание',title:'Миссия: найди безопасный путь',desc:'Проведи мышонка к сыру. Обойди серые камни и обязательно коснись зелёной звёздочки.',mission:'Обойди камни, собери звёздочку и найди сыр.',missionText:'Сначала доберись до зелёной звёздочки, а потом — до сыра. Через серые камни проходить нельзя.',start:[5,0],target:[0,5],walls:[[4,1],[4,2],[3,4],[2,4],[1,4]],checks:[[3,2]],sequence:[],coach:'Как вы выделяли значимые ориентиры? Что помогло не забыть про контрольную точку?',route:[]},
+ {tab:'Ошибка',name:'Найди ошибку программиста',process:'Анализ и самоконтроль',title:'Миссия: исправь алгоритм',desc:'Кто-то перепутал стрелки! Посмотри, куда поедет мышонок, найди неправильную стрелку и исправь путь.',mission:'Найди неправильную стрелку и исправь маршрут.',missionText:'Запусти готовый путь. Если мышонок попадёт в тупик, измени стрелки так, чтобы он добрался до сыра.',start:[0,0],target:[4,4],walls:[[1,1],[2,1],[3,1],[3,3]],checks:[],sequence:[],prefill:true,route:['D','R','R','R','R','D','D','D','D','L'],coach:'Как вы обнаружили ошибку? Что сравнивали: замысел, команды или фактическое движение мышки?'},
+ {tab:'Пространство',name:'Пространственный навигатор',process:'Пространственное мышление',title:'Миссия: найди дорогу домой',desc:'Мышонок заблудился! Найди дорогу от нижнего правого угла к сыру в верхнем левом. Обойди преграды.',mission:'Найди дорогу через лабиринт.',missionText:'Посмотри, где стоят камни. Придумай, как их обойти, и проведи мышонка к сыру.',start:[5,5],target:[0,0],walls:[[4,5],[4,4],[3,2],[2,2],[1,2],[1,1]],checks:[],sequence:[],route:[],coach:'Какие пространственные ориентиры вы использовали? Как определяли, куда повернуть, не двигая мышку?'},
+ {tab:'Планирование',name:'Маршрут с контрольной точкой',process:'Планирование и последовательность действий',title:'Миссия: сначала станция, потом сыр',desc:'Сначала доберись до зелёной звёздочки, а потом отправляйся за сыром.',mission:'Сначала звёздочка — потом сыр!',missionText:'Не забудь: сначала коснись зелёной звёздочки, только потом можно ехать к сыру.',start:[5,0],target:[0,5],walls:[[4,1],[3,1],[2,3],[2,4],[1,4],[4,4]],checks:[[2,2]],sequence:[],route:[],coach:'Как вы разделили задачу на этапы? Спланировали ли весь маршрут до запуска?'},
+ {tab:'Ориентиры',name:'Два контрольных пункта',process:'Рабочая память и планирование',title:'Миссия: собери два ориентира',desc:'На пути две зелёные звёздочки. Собери обе, а затем доберись до сыра!',mission:'Собери две звёздочки и найди сыр.',missionText:'Проверь, чтобы мышонок коснулся обеих зелёных звёздочек. После этого отправляйся к сыру.',start:[5,5],target:[0,0],walls:[[4,5],[4,3],[3,3],[2,1],[1,1]],checks:[[3,4],[2,2]],sequence:[],route:[],coach:'Как вы удерживали в памяти несколько условий одновременно? Что помогло проверить, что обе точки посещены?'},
+ {tab:'Точность',name:'Маршрут за 10 команд',process:'Планирование и самоконтроль',title:'Миссия: меньше команд — точнее решение',desc:'Помоги мышонку добраться до сыра не больше чем за 10 стрелок. Постарайся найти короткий путь!',mission:'Собери звёздочку и найди сыр за 10 стрелок или меньше.',missionText:'Сначала коснись зелёной звёздочки, затем доберись до сыра. У тебя не больше 10 стрелок — выбирай внимательно!',start:[5,0],target:[0,5],walls:[[4,1],[4,2],[3,2],[2,4],[1,4]],checks:[[2,2]],maxCommands:10,sequence:[],route:[],coach:'Как вы сравнивали варианты маршрута? Можно ли сократить путь, не нарушив условие?'},
+ {tab:'Гибкость',name:'Измени стратегию',process:'Когнитивная гибкость',title:'Миссия: найди другой способ',desc:'Ой, дорогу перекрыли! Измени свой план, обойди камни и найди новый путь к сыру через звёздочку.',mission:'Найди другой путь к сыру.',missionText:'Прямой путь не получится. Обойди препятствия, коснись зелёной звёздочки и найди дорогу к сыру.',start:[5,5],target:[0,0],walls:[[4,4],[3,4],[2,4],[2,2],[1,2],[1,1],[3,1]],checks:[[3,3]],sequence:[],route:[],coach:'Что пришлось изменить в первоначальном плане? Какие ещё варианты решения вы рассмотрели?'}
+];
+
+// Offline co-design tool: the audience can create a new playable level without contacting an AI service.
+const builderState={start:[5,0],target:[0,5],walls:[],checks:[],mode:'wall'};
+let instructionIsCustom=false,coachIsCustom=false;
+const processGuidance={
+ 'Внимание':{
+  focus:'выделение важных ориентиров и удержание внимания на условии',
+  instruction:'Внимательно рассмотрите всё поле. Найдите путь от мышки к сыру, не заходя на серые клетки. Проверьте расположение препятствий{checks}. Сначала осмотрите поле целиком, затем составьте маршрут и только после этого запускайте мышку.',
+  coach:'На какие детали поля вы обращали внимание в первую очередь? Что помогло не пропустить важные условия?'
+ },
+ 'Память':{
+  focus:'запоминание, удержание и воспроизведение информации',
+  instruction:'Внимательно изучите расположение мышки, сыра, препятствий{checks}. Запомните условия маршрута, затем составьте последовательность команд и проведите мышку к сыру. Постарайтесь удерживать в памяти весь план, а не только следующий шаг.',
+  coach:'Как вы удерживали маршрут в памяти? Помогало ли мысленное повторение или группировка шагов?'
+ },
+ 'Логическое мышление':{
+  focus:'анализ условий, сравнение вариантов и выбор обоснованного решения',
+  instruction:'Проанализируйте игровое поле. Найдите путь к сыру, учитывая препятствия{checks}. Перед запуском объясните, почему выбранный маршрут подходит и чем он лучше возможных альтернатив.',
+  coach:'Какие варианты вы рассмотрели? По каким признакам выбрали именно этот маршрут?'
+ },
+ 'Пространственная ориентировка':{
+  focus:'определение положения объектов и ориентировка по направлениям',
+  instruction:'Определите, где находятся мышка и сыр. Сориентируйтесь по клеткам и направлениям движения. Постройте маршрут, обходя препятствия{checks}, и проверьте, что каждая команда ведёт в нужную сторону.',
+  coach:'Какие ориентиры помогли определить направление? Как вы соотносили положение мышки и цели?'
+ },
+ 'Планирование':{
+  focus:'предварительное планирование и соблюдение последовательности этапов',
+  instruction:'Сначала внимательно изучите поле и спланируйте весь путь от старта до сыра. Учтите препятствия{checks}. Не запускайте мышку сразу: сначала составьте полный алгоритм, затем проверьте его и выполните.',
+  coach:'Удалось ли спланировать весь маршрут заранее? На какие этапы вы разделили задачу?'
+ },
+ 'Самоконтроль и когнитивная гибкость':{
+  focus:'проверка собственных действий, обнаружение ошибки и изменение способа решения',
+  instruction:'Составьте маршрут к сыру, учитывая препятствия{checks}. Перед запуском проверьте последовательность команд. Если мышка не сможет пройти путь, найдите причину, исправьте программу и попробуйте другой способ решения.',
+  coach:'Как вы проверяли правильность своего плана? Что изменили после обнаружения ошибки?'
+ }
+};
+function bSame(a,b){return a[0]===b[0]&&a[1]===b[1]}
+function bHas(list,p){return list.some(x=>bSame(x,p))}
+function builderCellKind(p){if(bSame(p,builderState.start))return 'start';if(bSame(p,builderState.target))return 'goal';if(bHas(builderState.walls,p))return 'wall';if(bHas(builderState.checks,p))return 'check';return ''}
+function renderBuilder(){const host=$('builderGrid');if(!host)return;host.innerHTML='';for(let r=0;r<6;r++)for(let c=0;c<6;c++){const p=[r,c],kind=builderCellKind(p),b=document.createElement('button');b.type='button';b.className='bcell '+kind;b.textContent=kind==='start'?'🐭':kind==='goal'?'🧀':kind==='wall'?'▧':kind==='check'?'★':'·';b.setAttribute('aria-label',`Строка ${r+1}, столбец ${c+1}: ${kind||'пусто'}`);b.addEventListener('click',()=>editBuilderCell(p));host.appendChild(b)}}
+function pointName(p){const vertical=p[0]===0?'верхнем':p[0]===5?'нижнем':'среднем';const horizontal=p[1]===0?'левом':p[1]===5?'правом':'центральном';return `${vertical} ${horizontal} секторе`}
+function buildDynamicInstruction(){
+ const process=$('builderProcess').value,guide=processGuidance[process]||processGuidance['Логическое мышление'];
+ const checkText=builderState.checks.length?` и ${builderState.checks.length} контрольн${builderState.checks.length===1?'ую точку':'ые точки'}`:'';
+ let text=guide.instruction.replace('{checks}',checkText);
+ text+=` Старт находится в ${pointName(builderState.start)}, финиш — в ${pointName(builderState.target)}.`;
+ if(builderState.walls.length)text+=` На поле размещено препятствий: ${builderState.walls.length}.`;
+ else text+=' На поле пока нет препятствий.';
+ if(builderState.checks.length)text+=' Контрольные точки необходимо посетить до финиша.';
+ const limit=parseInt($('builderLimit').value,10);if(Number.isInteger(limit)&&limit>0)text+=` Дополнительное условие: уложитесь не более чем в ${limit} команд.`;
+ return text;
+}
+function buildDynamicCoach(){const guide=processGuidance[$('builderProcess').value]||processGuidance['Логическое мышление'];return guide.coach}
+function refreshBuilderInstruction(force=false){if(force)instructionIsCustom=false;if(!instructionIsCustom)$('builderInstruction').value=buildDynamicInstruction();if(!coachIsCustom)$('builderCoach').value=buildDynamicCoach();}
+function editBuilderCell(p){const mode=builderState.mode;if(mode==='start'||mode==='goal'){if(mode==='start'&&bSame(p,builderState.target)||mode==='goal'&&bSame(p,builderState.start)){$('builderStatus').textContent='Старт и финиш должны находиться в разных клетках.';return}builderState.walls=builderState.walls.filter(x=>!bSame(x,p));builderState.checks=builderState.checks.filter(x=>!bSame(x,p));if(mode==='start')builderState.start=[...p];else builderState.target=[...p]}else if(mode==='wall'){if(bSame(p,builderState.start)||bSame(p,builderState.target)){$('builderStatus').textContent='Нельзя поставить препятствие на старт или финиш.';return}if(bHas(builderState.walls,p))builderState.walls=builderState.walls.filter(x=>!bSame(x,p));else{builderState.checks=builderState.checks.filter(x=>!bSame(x,p));builderState.walls.push([...p])}}else if(mode==='check'){if(bSame(p,builderState.start)||bSame(p,builderState.target)||bHas(builderState.walls,p)){$('builderStatus').textContent='Контрольную точку нельзя разместить на старте, финише или препятствии.';return}if(bHas(builderState.checks,p))builderState.checks=builderState.checks.filter(x=>!bSame(x,p));else if(builderState.checks.length<2)builderState.checks.push([...p]);else{$('builderStatus').textContent='В этом конструкторе можно добавить не более двух контрольных точек.';return}}else if(mode==='erase'){builderState.walls=builderState.walls.filter(x=>!bSame(x,p));builderState.checks=builderState.checks.filter(x=>!bSame(x,p));if(bSame(p,builderState.start))builderState.start=[5,0];if(bSame(p,builderState.target))builderState.target=[0,5]}
+renderBuilder();refreshBuilderInstruction();$('builderStatus').textContent=`Поле изменено. Препятствий: ${builderState.walls.length}; контрольных точек: ${builderState.checks.length}. Инструкция обновлена.`}
+function builderReachable(from,to,walls){const q=[from],seen=[from];while(q.length){const p=q.shift();if(bSame(p,to))return true;for(const d of [[-1,0],[1,0],[0,-1],[0,1]]){const n=[p[0]+d[0],p[1]+d[1]];if(n[0]<0||n[0]>5||n[1]<0||n[1]>5||bHas(walls,n)||bHas(seen,n))continue;seen.push(n);q.push(n)}}return false}
+function createAudienceLevel(){const name=$('builderName').value.trim()||'Задание аудитории',process=$('builderProcess').value,desc=$('builderInstruction').value.trim()||'Составьте маршрут и приведите мышку к сыру.',coach=$('builderCoach').value.trim()||'Как вы планировали маршрут и проверяли результат?',limit=parseInt($('builderLimit').value,10);let checkpoints=[...builderState.checks],way=[builderState.start,...checkpoints,builderState.target];for(let i=0;i<way.length-1;i++){if(!builderReachable(way[i],way[i+1],builderState.walls)){$('builderStatus').textContent='Пока не получается пройти маршрут: проверьте расположение препятствий и контрольных точек.';return}}
+const n={tab:'Наш уровень',name,process,title:`Миссия: ${name}`,desc,mission:`Задание на развитие: ${process.toLowerCase()}.`,missionText:desc,start:[...builderState.start],target:[...builderState.target],walls:builderState.walls.map(x=>[...x]),checks:checkpoints.map(x=>[...x]),sequence:[],route:[],coach};if(Number.isInteger(limit)&&limit>0)n.maxCommands=limit;tasks.push(n);renderTabs();loadLevel(tasks.length-1);$('builderStatus').textContent=`Готово! «${name}» добавлено в симулятор как задание ${tasks.length}. Инструкция участнику: ${desc}`}
+function initBuilder(){if(!$('builderGrid'))return;renderBuilder();refreshBuilderInstruction(true);document.querySelectorAll('#builderModes .modebtn').forEach(b=>b.addEventListener('click',()=>{builderState.mode=b.dataset.mode;document.querySelectorAll('#builderModes .modebtn').forEach(x=>x.classList.toggle('active',x===b))}));$('builderReset').addEventListener('click',()=>{builderState.start=[5,0];builderState.target=[0,5];builderState.walls=[];builderState.checks=[];renderBuilder();refreshBuilderInstruction();$('builderStatus').textContent='Поле сброшено. Инструкция обновлена. Можно проектировать новый маршрут.'});$('builderProcess').addEventListener('change',()=>{refreshBuilderInstruction();$('builderStatus').textContent='Познавательная цель изменена. Инструкция и вопрос для обсуждения обновлены.'});$('builderLimit').addEventListener('input',()=>{refreshBuilderInstruction();});$('builderInstruction').addEventListener('input',()=>{instructionIsCustom=true});$('builderCoach').addEventListener('input',()=>{coachIsCustom=true});$('resetInstructionBtn').addEventListener('click',()=>{instructionIsCustom=false;coachIsCustom=false;refreshBuilderInstruction(true);$('builderStatus').textContent='Автоматическая инструкция и вопрос восстановлены.'});$('createLevelBtn').addEventListener('click',createAudienceLevel)}
+
+const icons={U:'↑',D:'↓',L:'←',R:'→'},names={U:'вверх',D:'вниз',L:'влево',R:'вправо'};
+let level=0,task=tasks[0],pos=[...task.start],queue=[],stepIndex=0,attempts=0,runTimer=null,visited=[],hintVisible=true,sequenceShown=true;
+const $=id=>document.getElementById(id);
+function same(a,b){return a[0]===b[0]&&a[1]===b[1]}
+function inList(p,list){return list.some(x=>same(x,p))}
+function drawBoard(){const b=$('board');b.innerHTML='';for(let r=0;r<6;r++)for(let c=0;c<6;c++){const p=[r,c],el=document.createElement('div');el.className='cell';if(inList(p,task.walls))el.classList.add('wall');if(inList(p,task.checks))el.classList.add('check');if(same(p,task.target))el.classList.add('target');if(inList(p,visited))el.classList.add('visited');if(same(p,pos)){el.classList.add('mouse');el.textContent='🐭'}else if(same(p,task.target)){el.textContent='🧀'}else if(inList(p,task.walls)){el.textContent='🪨'}else if(inList(p,task.checks)){el.textContent='⭐'}b.appendChild(el)}}
+function drawQueue(){const q=$('queue');q.innerHTML='';if(!queue.length){q.innerHTML='<span class="emptymsg">Пока нет команд. Добавьте стрелки выше.</span>'}else queue.forEach((x,i)=>{const s=document.createElement('button');s.type='button';s.className='qitem'+(i<stepIndex?' done':'');s.textContent=icons[x];s.title=`Удалить команду ${i+1}: ${names[x]}`;s.setAttribute('aria-label',s.title);s.addEventListener('click',()=>{stopRun();queue.splice(i,1);pos=[...task.start];stepIndex=0;visited=[];drawBoard();drawQueue();updateStats();showStatus(`Команда ${i+1} удалена. Проверьте и запустите исправленный алгоритм.`)});q.appendChild(s)});$('commandsStat').textContent=queue.length}
+function showStatus(text,type=''){const s=$('status');s.className='status '+type;s.textContent=text}
+function updateStats(){$('stepsStat').textContent=stepIndex;$('attemptsStat').textContent=attempts}
+function loadLevel(n){stopRun();level=n;task=tasks[n];pos=[...task.start];queue=task.prefill?[...task.route]:[];stepIndex=0;visited=[];attempts=0;hintVisible=true;sequenceShown=true;$('levelLabel').textContent=`Игра ${n+1} из ${tasks.length}`;$('taskName').textContent=task.name;$('taskDesc').textContent=task.desc;$('missionTitle').textContent=task.title;$('missionText').textContent=task.missionText;const childTips=['Совет мышонка: запомни стрелки по порядку. Можно тихонько повторить их про себя.','Совет мышонка: сначала найди глазами звёздочку, сыр и все камни.','Совет мышонка: проверь каждую стрелку. Какая из них ведёт не туда?','Совет мышонка: сначала посмотри, где свободные клеточки.','Совет мышонка: не забудь про звёздочку по дороге к сыру.','Совет мышонка: собери обе звёздочки — ни одну нельзя пропустить!','Совет мышонка: попробуй найти самый короткий путь.','Совет мышонка: если путь закрыт, не сдавайся — придумай другой!'];$('coachHint').textContent=childTips[n]||'Совет мышонка: не спеши, сначала придумай путь!';$('sequenceBox').innerHTML='';if(task.sequence.length){task.sequence.forEach(x=>{let s=document.createElement('span');s.className='seqitem';s.textContent=icons[x];$('sequenceBox').appendChild(s)})}else{$('sequenceBox').innerHTML='<span class="small">Для этого задания подсказка не предусмотрена.</span>'} $('sequenceBox').classList.toggle('hide',!task.sequence.length);$('sequenceLabel').classList.toggle('hide',!task.sequence.length);$('hintActions').classList.toggle('hide',!task.sequence.length && !task.prefill);$('toggleHint').textContent='Спрятать стрелки';$('toggleHint').disabled=!task.sequence.length;
+ if(task.prefill){showStatus('Кто-то оставил неправильный путь! Нажми «Поехали!» и найди ошибку.','bad')}else{showStatus('Добавь стрелки, чтобы построить путь. Потом нажми «Поехали!»')}document.querySelectorAll('.tab').forEach((t,i)=>t.classList.toggle('active',i===n));drawBoard();drawQueue();updateStats()}
+function addCmd(c){if(runTimer)return;if(queue.length>=24){showStatus('Ого, уже много стрелок! Попробуй сделать путь короче.','bad');return}queue.push(c);drawQueue();showStatus(`Отлично! Добавлена стрелка «${names[c]}».`)}
+function nextPos(p,c){let [r,col]=p;if(c==='U')r--;if(c==='D')r++;if(c==='L')col--;if(c==='R')col++;return [r,col]}
+function doStep(){if(stepIndex>=queue.length){showStatus('Все стрелки использованы. Получилось добраться до сыра?');stopRun();return false}let cmd=queue[stepIndex],np=nextPos(pos,cmd);attempts=attempts||1;if(np[0]<0||np[0]>5||np[1]<0||np[1]>5){showStatus('Упс! Мышонок чуть не убежал с поля. Попробуй другую стрелку.','bad');stopRun();return false}if(inList(np,task.walls)){showStatus('Ой, впереди камень! Измени стрелки и попробуй ещё раз.','bad');stopRun();return false}pos=np;visited.push([...pos]);stepIndex++;drawBoard();drawQueue();updateStats();if(same(pos,task.target)){let passed=task.checks.every(ch=>inList(ch,visited));if(passed && (!task.maxCommands || queue.length<=task.maxCommands)){showStatus(task.maxCommands?`Ура! Ты собрал звёздочку и нашёл сыр всего за ${queue.length} стрелок! 🏆`:'Ура! Мышонок нашёл сыр! Отличная работа! 🧀🎉','good')}else if(!passed){showStatus('Сыр найден, но звёздочка осталась позади. Вернись и собери её!','bad')}else{showStatus(`Ты нашёл сыр, но использовал больше ${task.maxCommands} стрелок. Попробуй найти путь короче!`,'bad')}stopRun();return false}if(stepIndex>=queue.length){showStatus('Путь закончился, а сыр ещё не найден. Добавь стрелки и попробуй снова!', 'bad');stopRun();return false}return true}
+function run(){if(runTimer)return;if(stepIndex===0)attempts++;updateStats();if(stepIndex>=queue.length){showStatus('Сначала выбери хотя бы одну стрелку!','bad');return}runTimer=setInterval(()=>{if(!doStep())stopRun()},550)}function stopRun(){if(runTimer){clearInterval(runTimer);runTimer=null}}
+function resetMouse(){stopRun();pos=[...task.start];stepIndex=0;visited=[];drawBoard();drawQueue();updateStats();showStatus('Мышонок вернулся домой. Твои стрелки остались — можно попробовать ещё раз!')}
+function clearProgram(){stopRun();queue=[];stepIndex=0;pos=[...task.start];visited=[];drawBoard();drawQueue();updateStats();showStatus('Путь очищен. Построй новый маршрут!')}
+$('board').addEventListener('click',()=>{});
+document.querySelectorAll('.cmd[data-cmd]').forEach(b=>b.addEventListener('click',()=>addCmd(b.dataset.cmd)));
+document.querySelectorAll('.tab').forEach(b=>b.addEventListener('click',()=>loadLevel(Number(b.dataset.level))));
+$('runBtn').addEventListener('click',run);$('stepBtn').addEventListener('click',()=>{stopRun();if(stepIndex===0)attempts++;doStep();updateStats()});$('undoBtn').addEventListener('click',()=>{stopRun();if(queue.length){queue.pop();resetMouse();showStatus('Последняя стрелка убрана. Попробуй ещё раз!')} });$('clearBtn').addEventListener('click',clearProgram);$('resetBtn').addEventListener('click',resetMouse);
+$('toggleHint').addEventListener('click',()=>{if(!task.sequence.length)return;hintVisible=!hintVisible;$('sequenceBox').classList.toggle('hide',!hintVisible);$('toggleHint').textContent=hintVisible?'Скрыть подсказку':'Показать подсказку'});
+$('newTask').addEventListener('click',()=>{if(task.prefill){queue=[...task.route];resetMouse();drawQueue();showStatus('Путь восстановлен. Найди неправильную стрелку и попробуй снова!','bad')}else{resetMouse();showStatus('Мышонок готов! Построй новый путь и нажми «Поехали!»')}});
+function renderTabs(){const host=$('tabs');host.innerHTML='';tasks.forEach((t,i)=>{const b=document.createElement('button');b.className='tab';b.type='button';b.dataset.level=i;const kidTabs=['🧠 Запомни','🪨 Лабиринт','🔎 Ошибка','🧭 Найди путь','⭐ Одна звезда','🌟 Две звезды','🔟 10 стрелок','🔀 Другой путь'];b.textContent=kidTabs[i]||`${i+1}. ${t.tab}`;b.addEventListener('click',()=>loadLevel(i));host.appendChild(b)})}
+renderTabs();
+initBuilder();
+loadLevel(0);
+</script>
+</body>
+</html>
